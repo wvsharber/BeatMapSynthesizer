@@ -1,3 +1,6 @@
+#Python Pickle Files
+*.pkl
+
 #Stupid Mac Files
 *.ds_store
 
