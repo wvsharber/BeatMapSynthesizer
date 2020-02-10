@@ -1,3 +1,8 @@
+#Zip files, .dat, and mp3s
+*.mp3
+*.zip 
+*.dat
+
 #Python Pickle Files
 *.pkl
 
