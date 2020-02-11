@@ -603,7 +603,7 @@ def amplitude_rate_modulation(y, sr, difficulty):
         while diff > maxdiff:
             rate = choose_rate(np.mean([avg_beat_db.iloc[counter-1], avg_beat_db.iloc[counter], avg_beat_db.iloc[counter+1]]), difficulty)
             diff = rates[-1] - rate
-        if rate == 4 and rate[-1] == 4 and rate[-2] == 4:
+        if rate == 4 and rates[-1] == 4: #and rates[-2] == 4:
             rate = np.random.choice([0, 1, 2])
         rates.append(rate)
         counter +=1
