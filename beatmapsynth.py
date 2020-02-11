@@ -222,7 +222,9 @@ def random_notes_writer_v2(beat_times, difficulty, bpm):
             notes_list.append(note)
     #Remove potential notes that come too early in the song:
     for i, x in enumerate(notes_list):
-        if x['_time'] >= 0 and x['_time'] <= 1.5:
+        if notes_list[i]['_time'] >= 0 and notes_list[i]['_time'] <= 1.5:
+            del notes_list[i]
+        elif notes_list[i]['_time'] > beat_times[-1]:
             del notes_list[i]
 
     return notes_list
@@ -267,10 +269,10 @@ def HMM_notes_writer(beat_list, difficulty, version):
     """Writes a list of notes based on a Hidden Markov Model walk."""
     #Load model
     if version == 1:
-        with open(f"./models/HMM_{difficulty}.pkl", 'rb') as m:
+        with open(f"../models/HMM_{difficulty}.pkl", 'rb') as m:
             MC = pickle.load(m)
     elif version == 2:
-        with open(f"./models/HMM_{difficulty}_v2.pkl", 'rb') as m:
+        with open(f"../models/HMM_{difficulty}_v2.pkl", 'rb') as m:
             MC = pickle.load(m)
     #Set note placement rate dependent on difficulty level
     counter = 2
@@ -307,7 +309,9 @@ def HMM_notes_writer(beat_list, difficulty, version):
                 notes_list.append(note)
    #Remove potential notes that come too early in the song:
     for i, x in enumerate(notes_list):
-        if x['_time'] >= 0 and x['_time'] <= 1.5:
+        if notes_list[i]['_time'] >= 0 and notes_list[i]['_time'] <= 1.5:
+            del notes_list[i]
+        elif notes_list[i]['_time'] > beats[-1]:
             del notes_list[i]
 
     return notes_list
@@ -453,10 +457,10 @@ def segmented_HMM_notes_writer(y, sr, k, difficulty, version = 2):
     """This function writes the list of notes based on the segmented HMM model."""
     #Load model:
     if version == 1:
-        with open(f"./models/HMM_{difficulty}.pkl", 'rb') as m:
+        with open(f"../models/HMM_{difficulty}.pkl", 'rb') as m:
             MC = pickle.load(m)
     elif version == 2:
-        with open(f"./models/HMM_{difficulty}_v2.pkl", 'rb') as m:
+        with open(f"../models/HMM_{difficulty}_v2.pkl", 'rb') as m:
             MC = pickle.load(m)
             
     segments, beat_times, tempo = laplacian_segmentation(y, sr, k)
@@ -480,7 +484,9 @@ def segmented_HMM_notes_writer(y, sr, k, difficulty, version = 2):
                 notes_list.append(note)
     #Remove potential notes that come too early in the song:
     for i, x in enumerate(notes_list):
-        if x['_time'] >= 0 and x['_time'] <= 1.5:
+        if notes_list[i]['_time'] >= 0 and notes_list[i]['_time'] <= 1.5:
+            del notes_list[i]
+        elif notes_list[i]['_time'] > beats[-1]:
             del notes_list[i]
     
     return notes_list
@@ -546,20 +552,20 @@ def choose_rate(db, difficulty):
         elif db <= 55 and db > 45:
             p = [0.2, 0.6, 0.2, 0, 0, 0]
         elif db <= 45 and db > 35:
-            p = [0.1, 0.5, 0.35, 0.05, 0, 0]
+            p = [0.1, 0.5, 0.4, 0, 0, 0]
         else:
-            p = [0.05, 0.35, 0.5, 0.1, 0, 0]
+            p = [0.05, 0.35, 0.6, 0, 0, 0]
     elif difficulty.casefold() == 'expert'.casefold():
         if db > 70:
             p = [0.8, 0.2, 0, 0, 0, 0]
         elif db <= 70 and db > 55:
             p = [0.2, 0.7, 0.1, 0, 0, 0]
         elif db <= 55 and db > 50:
-            p = [0.1, 0.4, 0.3, 0.15, 0.05, 0]
+            p = [0.1, 0.4, 0.3, 0.2, 0, 0]
         elif db <= 50 and db > 45:
-            p = [0, 0.05, 0.6, 0.25, 0.1, 0]
+            p = [0, 0.05, 0.6, 0.35, 0, 0]
         else:
-            p = [0, 0, 0.35, 0.45, 0.2, 0]
+            p = [0, 0, 0.35, 0.65, 0, 0]
     elif difficulty.casefold() == 'expertPlus'.casefold():
         if db > 70:
             p = [0, 0.5, 0.4, 0.1, 0, 0]
@@ -655,10 +661,10 @@ def rate_modulated_segmented_HMM_notes_writer(y, sr, k, difficulty, version):
     """Function to write the notes to a list after predicting with the rate modulated segmented HMM model."""
     #Load model:
     if version == 1:
-        with open(f"./models/HMM_{difficulty}.pkl", 'rb') as m:
+        with open(f"../models/HMM_{difficulty}.pkl", 'rb') as m:
             MC = pickle.load(m)
     elif version == 2:
-        with open(f"./models/HMM_{difficulty}_v2.pkl", 'rb') as m:
+        with open(f"../models/HMM_{difficulty}_v2.pkl", 'rb') as m:
             MC = pickle.load(m)
     
     segments, beat_times, bpm = laplacian_segmentation(y, sr, k)
@@ -666,8 +672,17 @@ def rate_modulated_segmented_HMM_notes_writer(y, sr, k, difficulty, version):
     segments_df = segments_to_df_rate_modulated(segments, modulated_beat_list)
     preds = segment_predictions(segments_df, MC)
     #Combine beat numbers with HMM walk steps
-    beats = [(x/60)*bpm for x in beat_times]
-    df_preds = pd.concat([pd.DataFrame(beats, columns = ['_time']), preds], axis = 1, sort = True)
+    beat_times = [(x/60)*bpm for x in beat_times]
+    beat_count = list(range(len(beat_times)))
+    beats = pd.concat([pd.Series(beat_times, name = '_time'), pd.Series(beat_count, name = 'beat_count')], axis = 1)
+    for index, value in beats.iterrows():
+        if value['beat_count'] not in modulated_beat_list:
+            beats.drop(index = index, inplace=True)
+    merged_beats = pd.merge(left = beats, right = pd.Series(modulated_beat_list, name = 'beat_count'), how='outer', on='beat_count', sort = True)
+    merged_beats.interpolate(inplace=True)
+    merged_beats.drop(columns = 'beat_count', inplace = True)
+    
+    df_preds = pd.concat([merged_beats, preds], axis = 1, sort = True)
     df_preds.dropna(axis = 0, inplace = True)
     #Write notes dictionaries
     notes_list = []
@@ -683,7 +698,9 @@ def rate_modulated_segmented_HMM_notes_writer(y, sr, k, difficulty, version):
                 notes_list.append(note)
     #Remove potential notes that come too early in the song:
     for i, x in enumerate(notes_list):
-        if x['_time'] >= 0 and x['_time'] <= 1.5:
+        if notes_list[i]['_time'] >= 0 and notes_list[i]['_time'] <= 1.5:
+            del notes_list[i]
+        elif notes_list[i]['_time'] > beat_times[-1]:
             del notes_list[i]
 
     return notes_list, modulated_beat_list
