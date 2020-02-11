@@ -18,6 +18,8 @@ import markovify
 import sklearn.cluster
 import librosa.display
 import scipy
+import sys
+import argparse
 
 #Main Function:
 def beat_map_synthesizer(song_path, song_name, difficulty, model, k=5, version = 2):
@@ -265,10 +267,10 @@ def HMM_notes_writer(beat_list, difficulty, version):
     """Writes a list of notes based on a Hidden Markov Model walk."""
     #Load model
     if version == 1:
-        with open(f"../models/HMM_{difficulty}.pkl", 'rb') as m:
+        with open(f"./models/HMM_{difficulty}.pkl", 'rb') as m:
             MC = pickle.load(m)
     elif version == 2:
-        with open(f"../models/HMM_{difficulty}_v2.pkl", 'rb') as m:
+        with open(f"./models/HMM_{difficulty}_v2.pkl", 'rb') as m:
             MC = pickle.load(m)
     #Set note placement rate dependent on difficulty level
     counter = 2
@@ -451,10 +453,10 @@ def segmented_HMM_notes_writer(y, sr, k, difficulty, version = 2):
     """This function writes the list of notes based on the segmented HMM model."""
     #Load model:
     if version == 1:
-        with open(f"../models/HMM_{difficulty}.pkl", 'rb') as m:
+        with open(f"./models/HMM_{difficulty}.pkl", 'rb') as m:
             MC = pickle.load(m)
     elif version == 2:
-        with open(f"../models/HMM_{difficulty}_v2.pkl", 'rb') as m:
+        with open(f"./models/HMM_{difficulty}_v2.pkl", 'rb') as m:
             MC = pickle.load(m)
             
     segments, beat_times, tempo = laplacian_segmentation(y, sr, k)
@@ -653,10 +655,10 @@ def rate_modulated_segmented_HMM_notes_writer(y, sr, k, difficulty, version):
     """Function to write the notes to a list after predicting with the rate modulated segmented HMM model."""
     #Load model:
     if version == 1:
-        with open(f"../models/HMM_{difficulty}.pkl", 'rb') as m:
+        with open(f"./models/HMM_{difficulty}.pkl", 'rb') as m:
             MC = pickle.load(m)
     elif version == 2:
-        with open(f"../models/HMM_{difficulty}_v2.pkl", 'rb') as m:
+        with open(f"./models/HMM_{difficulty}_v2.pkl", 'rb') as m:
             MC = pickle.load(m)
     
     segments, beat_times, bpm = laplacian_segmentation(y, sr, k)
@@ -686,3 +688,16 @@ def rate_modulated_segmented_HMM_notes_writer(y, sr, k, difficulty, version):
 
     return notes_list, modulated_beat_list
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('song_path', metavar='path', type=str, help='File Path to song file')
+    parser.add_argument('song_name', type=str, help='Name of song to be displayed in Beat Saber')
+    parser.add_argument('difficulty', type=str, help="Desired difficulty level: 'easy', 'normal', 'hard', 'expert', or 'expertPlus'")
+    parser.add_argument('model', type=str, help="Desired model for mapping: 'random', 'HMM', 'segmented_HMM', 'rate_modulated_segmented_HMM'")
+    parser.add_argument('-k', type=int, help="Number of expected segments for segmented model. Default 5", default=5, required=False)
+    parser.add_argument('--version', type=int, help="Version of HMM model to use: 1 (90% rating or greater) or 2 (70% rating or greater)", default=2, required=False)
+
+    args = parser.parse_args()
+    
+    beat_map_synthesizer(args.song_path, args.song_name, args.difficulty, args.model, args.k, args.version)
+    
