@@ -595,16 +595,16 @@ def amplitude_rate_modulation(y, sr, difficulty):
     counter = 1
     while counter < len(avg_beat_db)-1:
         rate = choose_rate(np.mean([avg_beat_db.iloc[counter-1], avg_beat_db.iloc[counter], avg_beat_db.iloc[counter+1]]), difficulty)
-        diff = rate - rates[-1]
+        diff = np.abs(rate - rates[-1])
         if difficulty.casefold() == 'expert'.casefold() or difficulty.casefold() == 'expertPlus'.casefold():
-            maxdiff = 8
-            mindiff = -16
+            maxdiff = 4
         else:
             maxdiff = 2
-            mindiff = -4
-        while diff > maxdiff or diff < mindiff:
+        while diff > maxdiff:
             rate = choose_rate(np.mean([avg_beat_db.iloc[counter-1], avg_beat_db.iloc[counter], avg_beat_db.iloc[counter+1]]), difficulty)
             diff = rates[-1] - rate
+        if rate == 4 and rate[-1] == 4 and rate[-2] == 4:
+            rate = np.random.choice([0, 1, 2])
         rates.append(rate)
         counter +=1
     #Make list of beat numbers based on rates
