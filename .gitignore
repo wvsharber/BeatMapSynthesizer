@@ -9,6 +9,11 @@
 #Stupid Mac Files
 *.ds_store
 
+#Keep these files though!
+!HMM_models.zip
+!metadata.pkl
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
