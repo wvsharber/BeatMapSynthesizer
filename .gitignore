@@ -9,11 +9,6 @@
 #Stupid Mac Files
 *.ds_store
 
-#Keep these files though!
-!HMM_models.zip
-!metadata.pkl
-
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -143,3 +138,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+#Keep these files though!
+!metadata.pkl
+!data/example_custom_maps/*/*.dat
+!data/example_custom_maps/*/*.egg
+!generated_maps/*.zip

@@ -1,4 +1,4 @@
-![alt text](https://github.com/wvsharber/BeatMapSynthesizer/blob/master/beatMapSynth.png "Image credit: Jacob Joyce")
+![alt text](https://github.com/wvsharber/BeatMapSynthesizer/blob/master/beatMapSynth.png "Image credit: fellow Beat Saber enthusiast, Jacob Joyce")
 
 # BeatMapSynth
 
