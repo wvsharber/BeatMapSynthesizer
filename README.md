@@ -40,7 +40,7 @@ A full command might look like this (in a Mac terminal):
 
 It generally takes less than 30 seconds to run. It will probably print a warning about PySoundFile not working, but this is fine. After it finishes, a zip folder will appear in your working directory. Unzip this folder, place in the 'CustomMusic' folder in your Beat Saber system files, start Beat Saber, and find the map under Custom Music! 
 
-That's it! Please enjoy and let me know how it works for you!
+That's it! Please enjoy and let me know how it works for you! If you encounter any bugs, feel free to submit an issue, or if you fix it yourself, submit a pull request! 
 
 ---
 
