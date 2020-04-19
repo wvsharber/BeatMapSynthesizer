@@ -74,7 +74,7 @@ def write_info(song_name, bpm, difficulty):
         jump_movement = 14
         diff_name = 'Expert'
     elif difficulty.casefold() == 'expertPlus'.casefold():
-        difficulty_rank ==9
+        difficulty_rank = 9
         jump_movement = 16
         diff_name = 'ExpertPlus'
             
