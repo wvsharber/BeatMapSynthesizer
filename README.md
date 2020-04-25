@@ -50,6 +50,7 @@ First, you need to make sure that Anaconda and Python is installed on your syste
 Second, clone this github repo onto your system. Then navigate into the directory from the command line (Anaconda Prompt on Windows, or the Terminal in Mac OSX) use the following command to set up the BeatMapSynth environment:
 
 For Windows: ```conda env create -f Windows_environment.yml```
+
 For Mac OSX: ```conda env create -f OSX_environment.yml```
 
 And then activate the environment:
