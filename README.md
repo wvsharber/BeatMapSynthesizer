@@ -2,48 +2,6 @@
 
 # BeatMapSynth
 
-### _Quick Installation and Use - More options coming soon_ 
-
-Current instructions for installation and use are limited to a command line option with a Python script. More user-friendly options are coming soon!
-
-If you are familiar with conda environments and already have Python and conda installed on your system, clone this repo and set up the environment in `environment.yml` file.
-
-Direct your terminal to the repo and use the following command to set up the BeatMapSynth environment:
-
-```conda env create -f environment.yml```
-
-And then activate the environment:
-
-```conda activate BSMapSynth-env```
-
-Follow the instructions in the models README to acquire the necessary models into the `models/` directory. Once you have the models in the directory, the following line of code from your main repo directory should output a custom Beat Saber map file in a zipped folder.
-
-```python beatmapsynth.py ['filepath'] ['Song Name'] [difficulty] [model] [optional: -k] [optional: --version]```
-
-Where: 
-
-`['filepath']` is the path to your music file of choice
-
-`['Song Name']` is the name you wish to display in Beat Saber (will also be the name of the zip folder)
-
-`[difficulty]` is the desired difficulty level of the generated map, can be `'easy'`, `'normal'`, `'hard'`, `'expert'`, or `'expertPlus'`
-
-`[model]` is the model to use in mapping, can be `'random'`, `'HMM'`, `'segmented_HMM'`, or `'rate_modulated_segmented_HMM'`
-
-`[-k]` is the number of segments expected in the song for the segmented models. 5 is the default and seems to be a good fit for most songs following a standard verse-chorus structure. You may want to play around with this parameter if you find your mappings turn out too repetitive or not repetitive enough
-
-`[--version]` is the HMM model version. Can be `1` or `2`, 1 being a model trained with custom maps with ratings on beatsaver.com of over 90%, and 2 being trained on maps with rating over 70%. 2 is default.
-
-A full command might look like this (in a Mac terminal):
-
-```python beatmapsynth.py '~/Desktop/music_files/song.mp3' 'Example Song' 'expert' 'rate_modulated_segmented_HMM' -k 4 --version 1```
-
-It generally takes less than 30 seconds to run. It will probably print a warning about PySoundFile not working, but this is fine. After it finishes, a zip folder will appear in your working directory. Unzip this folder, place in the 'CustomMusic' folder in your Beat Saber system files, start Beat Saber, and find the map under Custom Music! 
-
-That's it! Please enjoy and let me know how it works for you! If you encounter any bugs, feel free to submit an issue, or if you fix it yourself, submit a pull request! 
-
----
-
 ## Introduction
 Beat Saber is a wildly successful virtual reality (VR) video game that has appeared in homes and arcades since its release in May 2018. The premise of the game is similar to other rhythm video games, such as Dance Dance Revolution or Guitar Hero, where the objective is to perform events in sync with music. In Beat Saber, the events are slicing through approaching blocks with two lightsabers (one in each hand) in time with upbeat, mostly electronic dance music. The blocks must be hit at the appropriate time and in the appropriate direction. Since this game is played in VR, the game is fully immersive and involves full body movement, including arm, wrist, and hand movements, ducking and dodging around obstacles, and even dancing if you’re inclined! (For an idea of what the game looks like while playing, view this [video](https://www.youtube.com/watch?v=c9hP7jbJTk0)). 
 
@@ -75,4 +33,55 @@ I also trained a Random Forest Chain Classifier model, yet the maps it generated
 Each model has been preliminarily evaluated based on the overall 'playability' of the generated maps, 'smoothness' of block placement, appropriateness of block placement and rate based on difficulty level. Full user testing surveys are planned, and parties interested in participating should contact me for inclusion! 
 
 ## Deployment
-In addition to this GitHub repo (which contains a lot of exploratory and development code), a standalone executable program will be available for download and use on Mac OSX and Windows systems. If you are comfortable setting up a Python environment with conda, you can clone this repo, install the conda environment in `environment.yml`, and run the `beatmapsynth.py` script from the command line. Full instructions are given in the _Quick Installation and Use_ section.
+In addition to this GitHub repo (which contains a lot of exploratory and development code), a standalone executable program will be available for download and use on Mac OSX and Windows systems. If you are comfortable setting up a Python environment with conda, you can clone this repo, install the conda environment in `environment.yml`, and run the `beatmapsynth.py` script from the command line. Full instructions are given in the _Installation and Use_ section.
+
+### _Installation and Use_ 
+
+Current instructions for installation and use are limited to a command line option with a Python script. More user-friendly options are coming soon!
+
+If you are familiar with conda environments and already have Python and conda installed on your system, clone this repo and set up the environment in the appropriate `environment.yml` file for your OS. 
+
+First, you need to make sure that Anaconda and Python is installed on your system. You can download the appropriate version [here](https://www.anaconda.com/products/individual).
+
+Second, clone this github repo onto your system. Then navigate into the directory from the command line (Anaconda Prompt on Windows, or the Terminal in Mac OSX) use the following command to set up the BeatMapSynth environment:
+
+For Windows: ```conda env create -f Windows_environment.yml```
+For Mac OSX: ```conda env create -f OSX_environment.yml```
+
+And then activate the environment:
+
+```conda activate BSMapSynth-env```
+
+Place the necessary models into the `models/` directory by downloading [this zipped folder](https://drive.google.com/open?id=1p7j0sENy0DzcMHd3iQ_LQw14j6OcKLsY) of the models. Unzip the folder, and place all of the files in the `models/` folder of your repo.
+
+Once you have the models in the directory, the following line of code from your main repo directory should output a custom Beat Saber map file in a zipped folder.
+
+```python beatmapsynth.py ['filepath'] ['Song Name'] [difficulty] [model] [optional: -k] [optional: --version]```
+
+Where: 
+
+`['filepath']` is the path to your music file of choice
+
+`['Song Name']` is the name you wish to display in Beat Saber (will also be the name of the zip folder)
+
+`[difficulty]` is the desired difficulty level of the generated map, can be `'easy'`, `'normal'`, `'hard'`, `'expert'`, or `'expertPlus'`
+
+`[model]` is the model to use in mapping, can be `'random'`, `'HMM'`, `'segmented_HMM'`, or `'rate_modulated_segmented_HMM'`
+
+`[-k]` is the number of segments expected in the song for the segmented models. 5 is the default and seems to be a good fit for most songs following a standard verse-chorus structure. You may want to play around with this parameter if you find your mappings turn out too repetitive or not repetitive enough
+
+`[--version]` is the HMM model version. Can be `1` or `2`, 1 being a model trained with custom maps with ratings on beatsaver.com of over 90%, and 2 being trained on maps with rating over 70%. 2 is default.
+
+A full command might look like this in the Anaconda Prompt on Windows:
+
+```python beatmapsynth.py C:\Users\wvsha\Desktop\BeatMapSynthesizer\song.mp3 Example_song expert rate_modulated_segmented_HMM -k 4 --version 1```
+
+Or in a Mac terminal:
+
+```python beatmapsynth.py '~/Desktop/music_files/song.mp3' 'Example Song' 'expert' 'rate_modulated_segmented_HMM' -k 4 --version 1```
+
+It generally takes less than 30 seconds to run. It will probably print a warning about PySoundFile not working and maybe something about a Numba deprecation warning, but this is fine. After it finishes, a zip folder will appear in your working directory. Unzip this folder, place in the 'CustomMusic' folder in your Beat Saber system files, start Beat Saber, and find the map under Custom Music! 
+
+That's it! Please enjoy and let me know how it works for you! If you encounter any bugs, feel free to submit an issue, or if you fix it yourself, submit a pull request! 
+
+---
