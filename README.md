@@ -61,7 +61,7 @@ If you do not already have Anaconda and Python, follow the instructions below to
 
     ```conda activate BSMapSynth-env```
 
-4. Place the necessary models into the `models/` directory by downloading [this zipped folder](https://drive.google.com/open?id=1p7j0sENy0DzcMHd3iQ_LQw14j6OcKLsY) of the models. Unzip the folder, and place all of the files in the `models/` folder of your repo.
+4. Place the necessary models into the `models/` directory by downloading [this zipped folder](https://drive.google.com/open?id=1p7j0sENy0DzcMHd3iQ_LQw14j6OcKLsY) of the models. Unzip the folder, and move all of the files from the unzipped folder into the `models/` folder of your repo. Don't just drag the unzipped folder to the `models/` folder, you need to take out the individual files.
 
 5. Run BeatMapSynth! The following line of code will output a custom Beat Saber map file in a zipped folder.
 
