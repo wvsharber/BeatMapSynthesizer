@@ -83,7 +83,7 @@ If you do not already have Anaconda and Python, follow the instructions below to
 
     A full command might look like this in the Anaconda Prompt on Windows:
 
-    ```python beatmapsynth.py C:\Users\wvsha\Desktop\BeatMapSynthesizer\song.mp3 Example_song expert rate_modulated_segmented_HMM -k 4 --version 1```
+    ```python beatmapsynth.py "C:\Users\wvsha\Desktop\BeatMapSynthesizer\song.mp3" "Example_song" expert rate_modulated_segmented_HMM -k 4 --version 1```
 
     Or in a Mac terminal:
 
