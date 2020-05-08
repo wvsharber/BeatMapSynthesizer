@@ -93,4 +93,6 @@ If you do not already have Anaconda and Python, follow the instructions below to
     
     After it finishes, a zip folder will appear in your working directory (i.e., the root folder of this repo). Unzip this folder, place it in the 'CustomMusic' folder in your Beat Saber system files, start Beat Saber, and find the map under Custom Music! 
 
+To use BeatMapSynth again after initial installation, just navigate into your repo again, reactivate the BSMapSynth-env (`conca activate BSMapSynth-env`), then you'll be good to go.
+
 That's it! Please enjoy and let me know how it works for you! If you encounter any bugs, feel free to submit an issue, or if you fix it yourself, submit a pull request! 
