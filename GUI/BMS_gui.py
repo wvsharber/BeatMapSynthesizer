@@ -8,14 +8,25 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import beatmapsynth
 
 class Ui_BeatMapSynth_GUI(object):
+    
+    def __init__(self):
+        self.difficulty = ""
+        self.model = ""
+        self.input_filepath = ""
+        self.output_name = ""
+        self.k_value = 5
+        self.version = 2
+    
     def setupUi(self, BeatMapSynth_GUI):
+        #Window Setup
         BeatMapSynth_GUI.setObjectName("BeatMapSynth_GUI")
         BeatMapSynth_GUI.resize(459, 475)
         self.centralwidget = QtWidgets.QWidget(BeatMapSynth_GUI)
         self.centralwidget.setObjectName("centralwidget")
+        #Input Header
         self.input_header = QtWidgets.QLabel(self.centralwidget)
         self.input_header.setGeometry(QtCore.QRect(10, 10, 71, 16))
         font = QtGui.QFont()
@@ -24,6 +35,7 @@ class Ui_BeatMapSynth_GUI(object):
         font.setWeight(75)
         self.input_header.setFont(font)
         self.input_header.setObjectName("input_header")
+        #Output Header
         self.output_header = QtWidgets.QLabel(self.centralwidget)
         self.output_header.setGeometry(QtCore.QRect(10, 80, 101, 16))
         font = QtGui.QFont()
@@ -32,6 +44,7 @@ class Ui_BeatMapSynth_GUI(object):
         font.setWeight(75)
         self.output_header.setFont(font)
         self.output_header.setObjectName("output_header")
+        #Required parameters header
         self.req_params_label = QtWidgets.QLabel(self.centralwidget)
         self.req_params_label.setGeometry(QtCore.QRect(10, 160, 151, 16))
         font = QtGui.QFont()
@@ -40,6 +53,7 @@ class Ui_BeatMapSynth_GUI(object):
         font.setWeight(75)
         self.req_params_label.setFont(font)
         self.req_params_label.setObjectName("req_params_label")
+        #Optional parameters header
         self.opt_params_label = QtWidgets.QLabel(self.centralwidget)
         self.opt_params_label.setGeometry(QtCore.QRect(10, 310, 151, 16))
         font = QtGui.QFont()
@@ -48,12 +62,14 @@ class Ui_BeatMapSynth_GUI(object):
         font.setWeight(75)
         self.opt_params_label.setFont(font)
         self.opt_params_label.setObjectName("opt_params_label")
+        #Accepted formats label
         self.formats_label = QtWidgets.QLabel(self.centralwidget)
         self.formats_label.setGeometry(QtCore.QRect(10, 30, 301, 16))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.formats_label.setFont(font)
         self.formats_label.setObjectName("formats_label")
+        #Output description label
         self.output_label = QtWidgets.QLabel(self.centralwidget)
         self.output_label.setGeometry(QtCore.QRect(10, 100, 391, 21))
         font = QtGui.QFont()
@@ -61,64 +77,84 @@ class Ui_BeatMapSynth_GUI(object):
         self.output_label.setFont(font)
         self.output_label.setWordWrap(True)
         self.output_label.setObjectName("output_label")
-        self.output_texbox = QtWidgets.QLineEdit(self.centralwidget)
-        self.output_texbox.setGeometry(QtCore.QRect(10, 130, 231, 21))
+        #Output textbox for entry
+        self.output_textbox = QtWidgets.QLineEdit(self.centralwidget)
+        self.output_textbox.setGeometry(QtCore.QRect(10, 130, 231, 21))
         font = QtGui.QFont()
         font.setPointSize(10)
-        self.output_texbox.setFont(font)
-        self.output_texbox.setObjectName("output_texbox")
+        self.output_textbox.setFont(font)
+        self.output_textbox.setObjectName("output_textbox")
+        #Execute button
         self.execute_button = QtWidgets.QPushButton(self.centralwidget)
         self.execute_button.setGeometry(QtCore.QRect(10, 420, 161, 32))
         self.execute_button.setObjectName("execute_button")
+        self.execute_button.clicked.connect(self.execute)
+        ##Difficulty group box
         self.difficulty_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.difficulty_groupBox.setGeometry(QtCore.QRect(10, 180, 111, 121))
         self.difficulty_groupBox.setObjectName("difficulty_groupBox")
+        #Easy button
         self.easy_radioButton = QtWidgets.QRadioButton(self.difficulty_groupBox)
         self.easy_radioButton.setGeometry(QtCore.QRect(10, 20, 100, 20))
         self.easy_radioButton.setChecked(True)
         self.easy_radioButton.setAutoExclusive(True)
         self.easy_radioButton.setObjectName("easy_radioButton")
+        self.easy_radioButton.toggled.connect(self.radioButton_selected)
+        #Normal Button
         self.normal_radioButton = QtWidgets.QRadioButton(self.difficulty_groupBox)
         self.normal_radioButton.setGeometry(QtCore.QRect(10, 40, 100, 20))
         self.normal_radioButton.setObjectName("normal_radioButton")
+        #Hard Button
         self.hard_radioButton = QtWidgets.QRadioButton(self.difficulty_groupBox)
         self.hard_radioButton.setGeometry(QtCore.QRect(10, 60, 100, 20))
         self.hard_radioButton.setObjectName("hard_radioButton")
+        #Expert Button
         self.expert_radioButton = QtWidgets.QRadioButton(self.difficulty_groupBox)
         self.expert_radioButton.setGeometry(QtCore.QRect(10, 80, 100, 20))
         self.expert_radioButton.setObjectName("expert_radioButton")
+        #ExpertPlus Button
         self.expertplus_radioButton = QtWidgets.QRadioButton(self.difficulty_groupBox)
         self.expertplus_radioButton.setGeometry(QtCore.QRect(10, 100, 100, 20))
         self.expertplus_radioButton.setObjectName("expertplus_radioButton")
+        ##Model choice group box
         self.model_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.model_groupBox.setGeometry(QtCore.QRect(150, 180, 241, 101))
         self.model_groupBox.setObjectName("model_groupBox")
+        #Random button
         self.random_radioButton = QtWidgets.QRadioButton(self.model_groupBox)
         self.random_radioButton.setGeometry(QtCore.QRect(10, 20, 100, 20))
         self.random_radioButton.setObjectName("random_radioButton")
+        #HMM button
         self.HMM_radioButton = QtWidgets.QRadioButton(self.model_groupBox)
         self.HMM_radioButton.setGeometry(QtCore.QRect(10, 40, 100, 20))
         self.HMM_radioButton.setObjectName("HMM_radioButton")
+        #Segmented HMM button
         self.segHMM_radioButton = QtWidgets.QRadioButton(self.model_groupBox)
         self.segHMM_radioButton.setGeometry(QtCore.QRect(10, 60, 131, 21))
         self.segHMM_radioButton.setObjectName("segHMM_radioButton")
+        #Rate modulated segmented HMM button
         self.ratesegHMM_radioButton = QtWidgets.QRadioButton(self.model_groupBox)
         self.ratesegHMM_radioButton.setGeometry(QtCore.QRect(10, 80, 231, 20))
         self.ratesegHMM_radioButton.setChecked(True)
         self.ratesegHMM_radioButton.setObjectName("ratesegHMM_radioButton")
+        ##Optional Version number choice group box
         self.version_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.version_groupBox.setGeometry(QtCore.QRect(180, 330, 111, 61))
         self.version_groupBox.setObjectName("version_groupBox")
+        #Version 1 button
         self.v1_radioButton = QtWidgets.QRadioButton(self.version_groupBox)
         self.v1_radioButton.setGeometry(QtCore.QRect(10, 20, 100, 20))
         self.v1_radioButton.setObjectName("v1_radioButton")
+        #Version 2 button
         self.v2_radioButton = QtWidgets.QRadioButton(self.version_groupBox)
         self.v2_radioButton.setGeometry(QtCore.QRect(10, 40, 100, 20))
         self.v2_radioButton.setChecked(True)
         self.v2_radioButton.setObjectName("v2_radioButton")
+        ##K selection group box
         self.K_groupBox = QtWidgets.QGroupBox(self.centralwidget)
         self.K_groupBox.setGeometry(QtCore.QRect(10, 330, 161, 80))
         self.K_groupBox.setObjectName("K_groupBox")
+        #K label
         self.K_label = QtWidgets.QLabel(self.K_groupBox)
         self.K_label.setGeometry(QtCore.QRect(10, 20, 151, 31))
         font = QtGui.QFont()
@@ -126,18 +162,21 @@ class Ui_BeatMapSynth_GUI(object):
         self.K_label.setFont(font)
         self.K_label.setWordWrap(True)
         self.K_label.setObjectName("K_label")
+        #K number spin box
         self.spinBox = QtWidgets.QSpinBox(self.K_groupBox)
         self.spinBox.setGeometry(QtCore.QRect(10, 50, 48, 24))
         self.spinBox.setMinimum(1)
         self.spinBox.setMaximum(15)
         self.spinBox.setProperty("value", 5)
         self.spinBox.setObjectName("spinBox")
+        #Input text box for entry
         self.input_textbox = QtWidgets.QLineEdit(self.centralwidget)
         self.input_textbox.setGeometry(QtCore.QRect(10, 50, 231, 21))
         font = QtGui.QFont()
         font.setPointSize(10)
         self.input_textbox.setFont(font)
         self.input_textbox.setObjectName("input_textbox")
+        #Status Bar
         BeatMapSynth_GUI.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(BeatMapSynth_GUI)
         self.statusbar.setObjectName("statusbar")
@@ -146,6 +185,12 @@ class Ui_BeatMapSynth_GUI(object):
         self.retranslateUi(BeatMapSynth_GUI)
         QtCore.QMetaObject.connectSlotsByName(BeatMapSynth_GUI)
 
+    def radioButton_selected(self):
+        radio
+
+    def execute(self):
+        beatmapsynth.beat_map_synthesizer(self.input_filepath, self.output_name, self.difficulty, self.model, self.k_value, self.version)
+    
     def retranslateUi(self, BeatMapSynth_GUI):
         _translate = QtCore.QCoreApplication.translate
         BeatMapSynth_GUI.setWindowTitle(_translate("BeatMapSynth_GUI", "MainWindow"))
@@ -155,7 +200,7 @@ class Ui_BeatMapSynth_GUI(object):
         self.opt_params_label.setText(_translate("BeatMapSynth_GUI", "Optional Parameters"))
         self.formats_label.setText(_translate("BeatMapSynth_GUI", "Accepted formats: .mp3, .wav, .flv, .raw, or .ogg"))
         self.output_label.setText(_translate("BeatMapSynth_GUI", "Text string that serves as the name of the exported zip folder and displayed name in Beat Saber"))
-        self.output_texbox.setText(_translate("BeatMapSynth_GUI", "ex: \"Left Hand Free - Alt-J\""))
+        self.output_textbox.setText(_translate("BeatMapSynth_GUI", "ex: \"Left Hand Free - Alt-J\""))
         self.execute_button.setText(_translate("BeatMapSynth_GUI", "Create Song Mapping"))
         self.difficulty_groupBox.setTitle(_translate("BeatMapSynth_GUI", "Difficulty Level"))
         self.easy_radioButton.setText(_translate("BeatMapSynth_GUI", "Easy"))
