@@ -15,8 +15,8 @@ from contextlib import redirect_stdout
 class Ui_BeatMapSynth_GUI(object):
     
     def __init__(self):
-        self.difficulty = ""
-        self.model = ""
+        self.difficulty = "easy"
+        self.model = "rate_modulated_segmented_HMM"
         self.input_filepath = ""
         self.output_name = ""
         self.k_value = 5
