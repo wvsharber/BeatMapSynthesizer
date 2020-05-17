@@ -15,6 +15,7 @@ from contextlib import redirect_stdout
 class Ui_BeatMapSynth_GUI(object):
     
     def __init__(self):
+        """Set initial parameters for beatmapsynth script"""
         self.difficulty = "easy"
         self.model = "rate_modulated_segmented_HMM"
         self.input_filepath = ""
@@ -23,6 +24,7 @@ class Ui_BeatMapSynth_GUI(object):
         self.version = 2
     
     def setupUi(self, BeatMapSynth_GUI):
+        """Set up GUI window with widgets"""
         #Window Setup
         BeatMapSynth_GUI.setObjectName("BeatMapSynth_GUI")
         BeatMapSynth_GUI.resize(459, 475)
@@ -154,9 +156,7 @@ class Ui_BeatMapSynth_GUI(object):
         #K label
         self.K_label = QtWidgets.QLabel(self.K_groupBox)
         self.K_label.setGeometry(QtCore.QRect(10, 20, 151, 31))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.K_label.setFont(font)
+        self.K_label.setFont(small_font)
         self.K_label.setWordWrap(True)
         self.K_label.setObjectName("K_label")
         #K number spin box
@@ -167,14 +167,12 @@ class Ui_BeatMapSynth_GUI(object):
         self.spinBox.setProperty("value", 5)
         self.spinBox.setObjectName("spinBox")
         self.spinBox.valueChanged.connect(self.k_selected)
-        #Input text box for entry
+        #Input text box for filepath entry
         self.input_textbox = QtWidgets.QLineEdit(self.centralwidget)
         self.input_textbox.setGeometry(QtCore.QRect(10, 50, 231, 21))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.input_textbox.setFont(font)
+        self.input_textbox.setFont(small_font)
         self.input_textbox.setObjectName("input_textbox")
-        
+        #File browser button
         self.browseButton = QtWidgets.QPushButton(self.centralwidget)
         self.browseButton.setGeometry(QtCore.QRect(250, 46, 100, 30))
         self.browseButton.setObjectName("browseButton")
@@ -190,10 +188,12 @@ class Ui_BeatMapSynth_GUI(object):
         QtCore.QMetaObject.connectSlotsByName(BeatMapSynth_GUI)
 
     def selectFile(self):
+        """Function to open and retrieve file paths from browser popup"""
         from PyQt5.QtWidgets import QFileDialog
         self.input_textbox.setText((QFileDialog.getOpenFileName()[0]))
     
     def difficulty_radioButton_selected(self):
+        """Function to set difficulty level from radio button selection"""
         if self.easy_radioButton.isChecked():
             self.difficulty = "easy"
         elif self.normal_radioButton.isChecked():
@@ -206,6 +206,7 @@ class Ui_BeatMapSynth_GUI(object):
             self.difficulty = "expertPlus"
 
     def model_radioButton_selected(self):
+        """Function to set model from radio button selection"""
         if self.random_radioButton.isChecked():
             self.model = "random"
         elif self.HMM_radioButton.isChecked():
@@ -216,26 +217,29 @@ class Ui_BeatMapSynth_GUI(object):
             self.model = "rate_modulated_segmented_HMM"
 
     def version_radioButton_selected(self):
+        """Function to set version number from radio button selection"""
         if self.v1_radioButton.isChecked():
             self.version = 1
         elif self.v2_radioButton.isChecked():
             self.version = 2
    
     def k_selected(self):
+        """Function to set K value from spin box selection"""
         self.k_value = self.spinBox.value()
     
     def execute(self):
-        
+        """Function to run beatmapsynth upon button press"""
         self.input_filepath = self.input_textbox.text()
         self.output_name = self.output_textbox.text()
         
-        f = io.StringIO()
-        with redirect_stdout(f):
-            beatmapsynth.beat_map_synthesizer(self.input_filepath, self.output_name, self.difficulty, self.model, self.k_value, self.version)
-        out = f.getvalue()
-        self.statusbar.showMessage(out)        
+        #f = io.StringIO()
+        #with redirect_stdout(f):
+        beatmapsynth.beat_map_synthesizer(self.input_filepath, self.output_name, self.difficulty, self.model, self.k_value, self.version)
+        #out = f.getvalue()
+        #self.statusbar.showMessage(out)        
     
     def retranslateUi(self, BeatMapSynth_GUI):
+        """Function that adds translatable(?) text to fields"""
         _translate = QtCore.QCoreApplication.translate
         BeatMapSynth_GUI.setWindowTitle(_translate("BeatMapSynth_GUI", "BeatMapSynth"))
         self.input_header.setText(_translate("BeatMapSynth_GUI", "Music File"))
