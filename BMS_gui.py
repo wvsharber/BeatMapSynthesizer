@@ -232,11 +232,20 @@ class Ui_BeatMapSynth_GUI(object):
         self.input_filepath = self.input_textbox.text()
         self.output_name = self.output_textbox.text()
         
-        #f = io.StringIO()
-        #with redirect_stdout(f):
+        # self.f = io.StringIO()
+        # self.my_timer = QtCore.QTimer()
+        # self.my_timer.timeout.connect(self.updateStatusBar)
+        # self.my_timer.start(500)
+        # with redirect_stdout(self.f):
         beatmapsynth.beat_map_synthesizer(self.input_filepath, self.output_name, self.difficulty, self.model, self.k_value, self.version)
+        
+        
         #out = f.getvalue()
-        #self.statusbar.showMessage(out)        
+        #self.statusbar.showMessage(out)
+                
+    # def updateStatusBar(self):
+    #     out = self.f.getvalue()
+    #     self.statusbar.showMessage(out)
     
     def retranslateUi(self, BeatMapSynth_GUI):
         """Function that adds translatable(?) text to fields"""
