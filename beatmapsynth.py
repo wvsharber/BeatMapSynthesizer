@@ -597,8 +597,10 @@ def amplitude_rate_modulation(y, sr, difficulty):
     while counter < len(avg_beat_db)-1:
         rate = choose_rate(np.mean([avg_beat_db.iloc[counter-1], avg_beat_db.iloc[counter], avg_beat_db.iloc[counter+1]]), difficulty)
         diff = np.abs(rate - rates[-1])
-        if difficulty.casefold() == 'expert'.casefold() or difficulty.casefold() == 'expertPlus'.casefold():
+        if difficulty.casefold() == 'expert'.casefold():
             maxdiff = 4
+        elif difficulty.casefold() == 'expertPlus'.casefold():
+            maxdiff = 8
         else:
             maxdiff = 2
         while diff > maxdiff:
