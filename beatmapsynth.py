@@ -20,6 +20,7 @@ import sklearn.cluster
 import scipy
 import sys
 import argparse
+import shutil
 
 #Main Function:
 def beat_map_synthesizer(song_path, song_name, difficulty, model, k=5, version = 2):
@@ -128,7 +129,7 @@ def music_file_converter(song_path):
     elif song_path.endswith('.raw'):
         AudioSegment.from_raw(song_path).export('song.egg', format='ogg')
     elif song_path.endswith('.ogg') or song_path.endswith('.egg'):
-        os.rename(song_path, 'song.egg')
+        shutil.copy2(song_path, 'song.egg')
     else:
         print("Unsupported song file type. Choose a file of type .mp3, .wav, .flv, .raw, or .ogg.")
 
