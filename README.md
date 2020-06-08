@@ -34,7 +34,7 @@ I developed three implementations of the HMMs:
 I also trained a Random Forest Chain Classifier model, yet the maps it generated were generally much worse than even the random model. This may be worth revisiting in the future, but at the moment the HMM models are considered the preferred models.
 
 ### Evaluation
-Each model has been preliminarily evaluated based on the overall 'playability' of the generated maps, 'smoothness' of block placement, appropriateness of block placement and rate based on difficulty level. Full user testing surveys are planned, and parties interested in participating should contact me for inclusion! 
+Each model has been preliminarily evaluated based on the overall 'playability' of the generated maps, 'smoothness' of block placement, appropriateness of block placement and rate based on difficulty level. Full user testing surveys are planned, and parties interested in participating should fill out [this form](https://docs.google.com/forms/d/e/1FAIpQLScYoJpZzT1v7UDY84rNbkPwubBIV5gKMlE_JtbvYXVZhtfgeQ/viewform?usp=sf_link) for inclusion! 
 
 ## Deployment
 In addition to this GitHub repo (which contains a lot of exploratory and development code), a standalone executable program will be available for download and use on Mac OSX and Windows systems. If you are comfortable setting up a Python environment with conda, you can clone this repo, install the conda environment in `environment.yml`, and run the `beatmapsynth.py` script from the command line. Full instructions are given in the _Installation and Use_ section.
