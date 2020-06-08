@@ -4,6 +4,8 @@
 
 __Instructions for installation and use are at the bottom of this README.__
 
+You can read more about BeatMapSynth in my blog post [here](https://medium.com/swlh/beatmapsynth-an-automatic-song-mapper-for-beat-saber-aa9e59f093f8).
+
 ## Introduction
 Beat Saber is a wildly successful virtual reality (VR) video game that has appeared in homes and arcades since its release in May 2018. The premise of the game is similar to other rhythm video games, such as Dance Dance Revolution or Guitar Hero, where the objective is to perform events in sync with music. In Beat Saber, the events are slicing through approaching blocks with two lightsabers (one in each hand) in time with upbeat, mostly electronic dance music. The blocks must be hit at the appropriate time and in the appropriate direction. Since this game is played in VR, the game is fully immersive and involves full body movement, including arm, wrist, and hand movements, ducking and dodging around obstacles, and even dancing if you’re inclined! (For an idea of what the game looks like while playing, view this [video](https://www.youtube.com/watch?v=c9hP7jbJTk0)). 
 
