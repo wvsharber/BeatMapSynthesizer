@@ -20,6 +20,7 @@ import sklearn.cluster
 import scipy
 import sys
 import argparse
+import shutil
 
 #Main Function:
 def beat_map_synthesizer(song_path, song_name, difficulty, model, k=5, version = 2):
@@ -128,7 +129,7 @@ def music_file_converter(song_path):
     elif song_path.endswith('.raw'):
         AudioSegment.from_raw(song_path).export('song.egg', format='ogg')
     elif song_path.endswith('.ogg') or song_path.endswith('.egg'):
-        os.rename(song_path, 'song.egg')
+        shutil.copy2(song_path, 'song.egg')
     else:
         print("Unsupported song file type. Choose a file of type .mp3, .wav, .flv, .raw, or .ogg.")
 
@@ -431,23 +432,38 @@ def segment_predictions(segment_df, HMM_model):
                 preds = pd.concat([preds, pd.Series(pred[0: row['length']])], axis = 0, ignore_index = True)
                 
             else:
-                pred = HMM_model.walk(init_state = tuple(preds.iloc[-5:, 0]))
-                while len(pred) < row['length']:
+                try:
                     pred = HMM_model.walk(init_state = tuple(preds.iloc[-5:, 0]))
-                completed_segments.update({row['seg_no']: {'start': len(preds)+1, 'end': len(preds)+len(pred)}})
-                preds = pd.concat([preds, pd.Series(pred[0: row['length']])], axis = 0, ignore_index = True)
+                    while len(pred) < row['length']:
+                        pred = HMM_model.walk(init_state = tuple(preds.iloc[-5:, 0]))
+                    completed_segments.update({row['seg_no']: {'start': len(preds)+1, 'end': len(preds)+len(pred)}})
+                    preds = pd.concat([preds, pd.Series(pred[0: row['length']])], axis = 0, ignore_index = True)
+                except:
+                    pred = HMM_model.walk()
+                    while len(pred) < row['length']:
+                        pred = HMM_model.walk()
+                    completed_segments.update({row['seg_no']: {'start': len(preds)+1, 'end': len(preds)+len(pred)}})
+                    preds = pd.concat([preds, pd.Series(pred[0: row['length']])], axis = 0, ignore_index = True)
 
         else:
             if row['length'] <= (completed_segments[row['seg_no']]['end'] - completed_segments[row['seg_no']]['start']): 
                 pred = preds.iloc[completed_segments[row['seg_no']]['start']: completed_segments[row['seg_no']]['start'] + row['length'], 0]
                 preds = pd.concat([preds, pred], axis = 0, ignore_index = True)
             else:
-                extend = HMM_model.walk(init_state = tuple(preds.iloc[completed_segments[row['seg_no']]['end'] - 5 : completed_segments[row['seg_no']]['end'], 0]))
-                pred = preds.iloc[completed_segments[row['seg_no']]['start']: completed_segments[row['seg_no']]['end'], 0]
-                diff = row['length'] - len(pred)
-                pred = pd.concat([pred, pd.Series(extend[0: diff+1])], axis = 0, ignore_index = True)
-                completed_segments.update({row['seg_no']: {'start': len(preds)+1, 'end': len(preds)+len(pred)}})
-                preds = pd.concat([preds, pred], axis = 0, ignore_index = True)
+                try:
+                    extend = HMM_model.walk(init_state = tuple(preds.iloc[completed_segments[row['seg_no']]['end'] - 5 : completed_segments[row['seg_no']]['end'], 0]))
+                    pred = preds.iloc[completed_segments[row['seg_no']]['start']: completed_segments[row['seg_no']]['end'], 0]
+                    diff = row['length'] - len(pred)
+                    pred = pd.concat([pred, pd.Series(extend[0: diff+1])], axis = 0, ignore_index = True)
+                    completed_segments.update({row['seg_no']: {'start': len(preds)+1, 'end': len(preds)+len(pred)}})
+                    preds = pd.concat([preds, pred], axis = 0, ignore_index = True)
+                except:
+                    extend = HMM_model.walk()
+                    pred = preds.iloc[completed_segments[row['seg_no']]['start']: completed_segments[row['seg_no']]['end'], 0]
+                    diff = row['length'] - len(pred)
+                    pred = pd.concat([pred, pd.Series(extend[0: diff+1])], axis = 0, ignore_index = True)
+                    completed_segments.update({row['seg_no']: {'start': len(preds)+1, 'end': len(preds)+len(pred)}})
+                    preds = pd.concat([preds, pred], axis = 0, ignore_index = True)
     
     preds_list = list(preds.iloc[:, 0])
     preds = walk_to_df(preds_list)
@@ -596,8 +612,10 @@ def amplitude_rate_modulation(y, sr, difficulty):
     while counter < len(avg_beat_db)-1:
         rate = choose_rate(np.mean([avg_beat_db.iloc[counter-1], avg_beat_db.iloc[counter], avg_beat_db.iloc[counter+1]]), difficulty)
         diff = np.abs(rate - rates[-1])
-        if difficulty.casefold() == 'expert'.casefold() or difficulty.casefold() == 'expertPlus'.casefold():
+        if difficulty.casefold() == 'expert'.casefold():
             maxdiff = 4
+        elif difficulty.casefold() == 'expertPlus'.casefold():
+            maxdiff = 8
         else:
             maxdiff = 2
         while diff > maxdiff:
