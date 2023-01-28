@@ -305,7 +305,7 @@ def HMM_notes_writer(beat_list, difficulty, version):
                 note = {'_time': row['_time'],
                         '_lineIndex': int(row[f"notes_lineIndex_{num}"]),
                         '_lineLayer': int(row[f"notes_lineLayer_{num}"]),
-                        '_type': num,
+                        '_type': int(num),
                         '_cutDirection': int(row[f"notes_cutDirection_{num}"])}
                 notes_list.append(note)
    #Remove potential notes that come too early in the song:
@@ -495,7 +495,7 @@ def segmented_HMM_notes_writer(y, sr, k, difficulty, version = 2):
                 note = {'_time': row['_time'],
                         '_lineIndex': int(row[f"notes_lineIndex_{num}"]),
                         '_lineLayer': int(row[f"notes_lineLayer_{num}"]),
-                        '_type': num,
+                        '_type': int(num),
                         '_cutDirection': int(row[f"notes_cutDirection_{num}"])}
                 notes_list.append(note)
     #Remove potential notes that come too early in the song:
@@ -711,7 +711,7 @@ def rate_modulated_segmented_HMM_notes_writer(y, sr, k, difficulty, version):
                 note = {'_time': row['_time'],
                         '_lineIndex': int(row[f"notes_lineIndex_{num}"]),
                         '_lineLayer': int(row[f"notes_lineLayer_{num}"]),
-                        '_type': num,
+                        '_type': int(num),
                         '_cutDirection': int(row[f"notes_cutDirection_{num}"])}
                 notes_list.append(note)
     #Remove potential notes that come too early in the song:
